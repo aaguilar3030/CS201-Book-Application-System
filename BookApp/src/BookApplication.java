@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -15,7 +14,7 @@ public class BookApplication {
         loadBooksFromFile();
 
         System.out.println("=====================================");
-        System.out.println("         Book Application");
+        System.out.println("Book Application");
         System.out.println("=====================================");
 
         while (running) {
@@ -25,7 +24,7 @@ public class BookApplication {
             System.out.println("2. Add Audio Book");
             System.out.println("3. View Last Six Books");
             System.out.println("4. View Totals and Averages");
-            System.out.println("5. View Genres");
+            System.out.println("5. View Genre's");
             System.out.println("6. View Last Three Audio Books");
             System.out.println("7. View Full Book List");
             System.out.println("8. Exit");
@@ -37,9 +36,7 @@ public class BookApplication {
 
                 //Import Books
                 case "0":
-
                     loadBooksFromFile();
-                    saveBooksToFile();
                     break;
 
 
@@ -236,9 +233,12 @@ public class BookApplication {
 
     // Save books to txt file
     private static void saveBooksToFile() {
-        if (AbstractBook.allBooks.isEmpty()){
-            System.out.println("No books to save, file not modified.");
+
+        if (AbstractBook.allBooks.isEmpty()) {
+            System.out.println("No books to save. File not modified.");
+            return;
         }
+
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_NAME))) {
 
             pw.println("title,author,genre,cost,length,pages,booktype");
@@ -248,24 +248,27 @@ public class BookApplication {
                 if (b.getClass().getSimpleName().equals("PrintedBook")) {
                     PrintedBook pb = (PrintedBook) b;
 
-                    pw.println("\"" + pb.title
-                            + "\"," + pb.author
-                            + "\"," + pb.genre
-                            + "\"," + pb.getCost() + ",N/A," +
-                            pb.getNumberOfPages() +
-                            ",printedBook");
+                    pw.println("\"" + pb.title + "\"," +
+                            "\"" + pb.author + "\"," +
+                            "\"" + pb.genre + "\"," +
+                            pb.getCost() + "," +
+                            "\"N/A\"," +
+                            pb.getNumberOfPages() + "," +
+                            "printedBook");
 
                 } else if (b.getClass().getSimpleName().equals("AudioBook")) {
                     AudioBook ab = (AudioBook) b;
 
-                    pw.println("\"" + ab.title
-                            + "\"," + ab.author
-                            + "\"," + ab.genre
-                            + "\"," + ab.getCost() + ","
+                    pw.println("\"" + ab.title + "\"," +
+                            "\"" + ab.author + "\"," +
+                            "\"" + ab.genre + "\"," +
+                            ab.getCost() + ","
                             + ab.getLength() + "," +
                             "\"N/A\"," + "audiobook");
                 }
             }
+
+            System.out.println("File saved successfully.");
 
         } catch (IOException e) {
             System.out.println("Error saving to " + FILE_NAME + ": " + e.getMessage());
@@ -315,3 +318,4 @@ public class BookApplication {
         }
     }
 }
+
